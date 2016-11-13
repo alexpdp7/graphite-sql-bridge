@@ -32,4 +32,4 @@ def get_points(from_, until, target, max_data_points):
 def random_data_points():
     import datetime
     import random
-    return [[random.randint(0,100), int(datetime.datetime.now().timestamp()) - i*60] for i in range(0,100)]
+    return [[random.randint(0,100), int(datetime.datetime.now().timestamp()) - 6000 + i*60] for i in range(0,100)]
