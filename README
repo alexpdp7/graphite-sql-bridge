@@ -1,0 +1,5 @@
+A webapp which exposes SQL queries using the minimal Graphite API required for Grafana
+
+$ mkvirtualenv graphite-sql-bridge
+$ pip install -e .[dev]
+$ FLASK_APP=grsqlbr flask run
