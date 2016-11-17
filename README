@@ -9,3 +9,8 @@ Database you connect to should have a view with three columns:
 * series: name of the data series
 * timestamp: time of the point
 * value: value of the point
+
+Running using Docker:
+
+$ docker build -t graphite-sql-bridge .
+$ docker run -e DATABASE=<psycopg2 url> -e FLASK_APP=grsqlbr -p 5000:5000 graphite-sql-bridge flask run --host=0.0.0.0
