@@ -2,4 +2,10 @@ A webapp which exposes SQL queries using the minimal Graphite API required for G
 
 $ mkvirtualenv graphite-sql-bridge
 $ pip install -e .[dev]
-$ FLASK_APP=grsqlbr flask run
+$ DATABASE=<psycopg2 url> FLASK_APP=grsqlbr flask run
+
+Database you connect to should have a view with three columns:
+
+* series: name of the data series
+* timestamp: time of the point
+* value: value of the point

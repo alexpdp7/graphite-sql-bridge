@@ -1,5 +1,8 @@
+import datetime
 import flask
 import flask_cors
+import os
+import psycopg2
 
 
 app = flask.Flask(__name__)
@@ -14,10 +17,10 @@ def find():
 @app.route('/render', methods=['POST'])
 def render():
     assert flask.request.form['format'] == 'json'
-    return flask.json.jsonify(get_points(flask.request.form['from'],
-                                         flask.request.form['until'],
+    return flask.json.jsonify(get_points(datetime.datetime.fromtimestamp(int(flask.request.form['from'])),
+                                         datetime.datetime.fromtimestamp(int(flask.request.form['until'])),
                                          flask.request.form.getlist('target'),
-                                         flask.request.form['maxDataPoints'],
+                                         int(flask.request.form['maxDataPoints']),
                                          ))
 
 
@@ -29,11 +32,16 @@ def get_metrics():
     ]
 
 
+def connect():
+    return psycopg2.connect(os.environ['DATABASE'])
+
+
 def get_points(from_, until, targets, max_data_points):
-    return [{'target': target, 'datapoints': random_data_points()} for target in targets]
+    return [{'target': target, 'datapoints': get_db_points(from_, until, target)} for target in targets]
 
 
-def random_data_points():
-    import datetime
-    import random
-    return [[random.randint(0,100), int(datetime.datetime.now().timestamp()) - 6000 + i*60] for i in range(0,100)]
+def get_db_points(from_, until, target):
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute('select value, extract(epoch from timestamp) from points where series = %s', (target,))
+    return cursor.fetchall()
