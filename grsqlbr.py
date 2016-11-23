@@ -17,9 +17,7 @@ def find():
 @app.route('/render', methods=['POST'])
 def render():
     assert flask.request.form['format'] == 'json'
-    return flask.json.jsonify(get_points(datetime.datetime.fromtimestamp(int(flask.request.form['from'])),
-                                         datetime.datetime.fromtimestamp(int(flask.request.form['until'])),
-                                         flask.request.form.getlist('target'),
+    return flask.json.jsonify(get_points(flask.request.form.getlist('target'),
                                          int(flask.request.form['maxDataPoints']),
                                          ))
 
@@ -36,11 +34,11 @@ def connect():
     return psycopg2.connect(os.environ['DATABASE'])
 
 
-def get_points(from_, until, targets, max_data_points):
-    return [{'target': target, 'datapoints': get_db_points(from_, until, target)} for target in targets]
+def get_points(targets, max_data_points):
+    return [{'target': target, 'datapoints': get_db_points(target)} for target in targets]
 
 
-def get_db_points(from_, until, target):
+def get_db_points(target):
     connection = connect()
     cursor = connection.cursor()
     cursor.execute('select value, extract(epoch from timestamp) from points where series = %s', (target,))
