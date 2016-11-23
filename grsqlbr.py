@@ -23,11 +23,7 @@ def render():
 
 
 def get_metrics():
-    return [
-        {'is_leaf': 1, 'name': 'foo', 'path': 'foo.'},
-        {'is_leaf': 1, 'name': 'bar', 'path': 'foo.'},
-        {'is_leaf': 0, 'name': 'foo', 'path': ''},
-    ]
+    return []
 
 
 def connect():
