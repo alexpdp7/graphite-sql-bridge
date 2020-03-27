@@ -1,3 +1,5 @@
+DEPRECATED: for a long time, Grafana has allowed querying SQL databases easily
+
 A webapp which exposes SQL queries using the minimal Graphite API required for Grafana
 
 $ mkvirtualenv graphite-sql-bridge
